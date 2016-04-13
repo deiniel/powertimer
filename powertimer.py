@@ -1,5 +1,5 @@
 
-from threading import _Timer
+from threading import _Timer, Event
 from time import sleep
 
 class PWTimer(_Timer):      # PowerTimer class
@@ -13,6 +13,7 @@ class PWTimer(_Timer):      # PowerTimer class
             multiplier = 3600
         elif self.time_unit == 'light_years':
             pass        # ok, you implement this one :P
+        self.paused = Event()
         self.interval = multiplier * interval
         self.function = function
         self.remaining_interval = 0
@@ -21,6 +22,8 @@ class PWTimer(_Timer):      # PowerTimer class
 
     def run(self):          # overwrites the original run() from _Timer so PWTimer can return the current timer counter
         while not self.finished.is_set():
+            while self.paused.is_set():
+                pass        #TODO: more elegant way to wait when the timer is paused
             self.finished.wait(1)
             self._actual_count += 1
             self.remaining_interval = self.interval - self._actual_count
@@ -32,10 +35,10 @@ class PWTimer(_Timer):      # PowerTimer class
         self.finished.set()
 
     def pause(self):        # pauses the timer so you can resume it later
-        pass
+        self.paused.set()
 
     def resume(self):       # resumes a paused timer
-        pass
+        self.paused.clear()
 
     def restart(self):      # restarts the timer at "runtime" or when is already finished
         pass                # TODO: Los 'Threads' solo se pueden iniciar una vez... a ver como te lo montas XD
