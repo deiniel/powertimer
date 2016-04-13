@@ -3,7 +3,7 @@ from threading import _Timer
 from time import sleep
 
 class PWTimer(_Timer):      # PowerTimer class
-    def __init__(self, interval, time_unit='seconds'):
+    def __init__(self, interval, function, time_unit='seconds'):
         self.time_unit = time_unit
         if self.time_unit == 'seconds':
             multiplier = 1
@@ -16,10 +16,7 @@ class PWTimer(_Timer):      # PowerTimer class
         self.interval = multiplier * interval
         self.remaining_interval = 0
         self._actual_count = 0
-        super(PWTimer, self).__init__(self.interval, self.dummy, args=[], kwargs={})
-
-    def dummy(self):
-        print "timeout!"
+        super(PWTimer, self).__init__(self.interval, function, args=[], kwargs={})
 
     def run(self):          # overwrites the original run() from _Timer so PWTimer can return the current timer counter
         while not self.finished.is_set():
