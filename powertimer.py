@@ -14,9 +14,10 @@ class PWTimer(_Timer):      # PowerTimer class
         elif self.time_unit == 'light_years':
             pass        # ok, you implement this one :P
         self.interval = multiplier * interval
+        self.function = function
         self.remaining_interval = 0
         self._actual_count = 0
-        super(PWTimer, self).__init__(self.interval, function, args=[], kwargs={})
+        super(PWTimer, self).__init__(self.interval, self.function, args=[], kwargs={})
 
     def run(self):          # overwrites the original run() from _Timer so PWTimer can return the current timer counter
         while not self.finished.is_set():
@@ -44,15 +45,3 @@ class PWTimer(_Timer):      # PowerTimer class
 class PWCounter(object):    # PowerCounter class
     pass
 
-
-t = PWTimer(10)
-t.start()
-sleep(3)
-t.stop()
-sleep(3)
-t.start()
-print "again"
-# sleep(2)
-# t.stop()
-# print "hello"
-# pass
