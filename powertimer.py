@@ -148,4 +148,23 @@ class PWTimer(_Timer):      # PowerTimer class
 
 
 class PWCounter(object):    # PowerCounter class
-    pass
+    def __init__(self, start_count, end_count, function, step=1):
+        self.start_count = start_count
+        self.end_count = end_count
+        self.function = function
+        if self.start_count <= self.end_count:
+            self.step = -step
+        elif self.start_count > self.end_count:
+            self.step = +step
+        self.remaining_counts = self.end_count - self.start_count
+
+    def update(self):
+        self.remaining_counts += self.step
+
+
+def dummy():
+    print "I am a dummy"
+
+counter = PWCounter(0, 3, dummy)
+counter.update()
+print counter.remaining_counts
