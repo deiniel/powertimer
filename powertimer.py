@@ -28,8 +28,9 @@ class PWTimer(_Timer):      # PowerTimer class
             self._actual_count += 1
             self.remaining_interval = self.interval - self._actual_count
             if self.interval - self._actual_count == 0:
-                self.function(*self.args, **self.kwargs)
                 self.finished.set()
+                self.function(*self.args, **self.kwargs)
+
 
     def stop(self):         # does the same as cancel() in the _Timer class but the name is more natural
         self.finished.set()
