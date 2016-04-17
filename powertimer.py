@@ -65,17 +65,18 @@ class PWCounter(object):    # PowerCounter class
         self.function = function
         if self.start_count <= self.end_count:
             self.step = -step
+            self.remaining_counts = self.end_count - self.start_count
         elif self.start_count > self.end_count:
-            self.step = +step
-        self.remaining_counts = self.end_count - self.start_count
+            self.step = step
+            self.remaining_counts = self.start_count - self.end_count
 
     def update(self):
-        self.remaining_counts += self.step
+        if not self.finished.is_set():
+            self.remaining_counts += self.step
 
 
 def dummy():
     print "I am a dummy"
 
 counter = PWCounter(0, 3, dummy)
-counter.update()
 print counter.remaining_counts
