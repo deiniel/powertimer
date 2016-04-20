@@ -5,16 +5,21 @@ class PWTimer(_Timer):      # PowerTimer class
     """
     Creates a PWTimer object.
     PWTimer are improved Timer objects that are able to call a function after certaint conditions are accomplished.
-
-    interval: Time the timer has to "time" before executing the selected function.
-    function: The function that is going to be triggered after the timeout happeds.
-    loop: The number of intervals the timer is going to be executed.
-        loop = 1 (default): The timer will count only one loop and execute the function after the timeout happens.
-        loop = 0: The timer will run forever and execute the function after the timeout is reached (it means the
-        self.stop() method will never be called and the user has to take care of that).
-    time_unit: The unit of time (secods, minutes) the interal is applied. By defaut 'seconds'.
+    The class can "time" in an endless loop or a defined ammount of times. It can also be restarted and used again with
+    new values if wanted.
     """
     def __init__(self, interval, function, loop=1, time_unit='seconds'):
+        """
+
+        :param interval: Time the timer has to "time" before executing the selected function.
+        :param function: The function that is going to be triggered after the timeout happens.
+        :param loop: The number of intervals the timer is going to be executed.
+                     loop = 1 (default): The timer will count only one loop and execute the function after the
+                     timeout happens.
+                     loop = 0: The timer will run forever and execute the function after the timeout  is reached
+                     (it means the self.stop() method will never be called and the user has to take care of that).
+        :param time_unit: The unit of time (secods, minutes) the interal is applied. By defaut 'seconds'.
+        """
         self.__time_unit = time_unit
         if self.__time_unit == 'seconds':
             self.__multiplier = 1
