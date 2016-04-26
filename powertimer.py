@@ -149,13 +149,3 @@ class PWTimer(_Timer):      # PowerTimer class
 
 class PWCounter(object):    # PowerCounter class
     pass
-
-def dummy():
-    print "sacabo"
-
-from time import sleep
-
-my_timer = PWTimer(5, dummy, loop=6)
-my_timer.start()
-sleep(6)
-my_timer.restart(loop=1)
