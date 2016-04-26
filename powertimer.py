@@ -63,20 +63,42 @@ class PWCounter(object):    # PowerCounter class
         self.start_count = start_count
         self.end_count = end_count
         self.function = function
+        self.finished = Event()
         if self.start_count <= self.end_count:
             self.step = -step
             self.remaining_counts = self.end_count - self.start_count
         elif self.start_count > self.end_count:
             self.step = step
             self.remaining_counts = self.start_count - self.end_count
+        self.function_triggered = Event()
 
     def update(self):
         if not self.finished.is_set():
             self.remaining_counts += self.step
+            if self.remaining_counts <= 0:
+                self.finished.set()
+
+        elif self.finished.is_set() and not self.function_triggered.is_set():
+            self.function()
+            self.function_triggered.set()
+
+    def restart(self):
+        self.function_triggered.clear()
+        self.finished.clear()
+        if self.start_count <= self.end_count:
+            self.remaining_counts = self.end_count - self.start_count
+        elif self.start_count > self.end_count:
+            self.remaining_counts = self.start_count - self.end_count
 
 
 def dummy():
     print "I am a dummy"
 
 counter = PWCounter(0, 3, dummy)
+for i in range(0, 5):
+    i += 1
+    counter.update()
+print counter.remaining_counts
+counter.update()
+counter.restart()
 print counter.remaining_counts
